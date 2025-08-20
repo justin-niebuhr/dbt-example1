@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: dim_customer
+    description: "The Customer Dimension"
+    columns:
+      - name: CUSTOMER_SCD2_ID
+        description: "The surrogate key of the record"
+        tests:
+          - unique
+          - not_null
+      - name: CUSTOMER_ID
+        description: "The surrogate key of the table"
+        tests:
+          - not_null
+      - name: FIRST_NAME
+        description: "Customer first name"
+        meta:
+          contains_pii: true
+      - name: LAST_NAME
+        description: "Customer last name"
+        meta:
+          contains_pii: true
+      - name: EMAIL
+        description: "Customer email address"
+        meta: 
+          contains_pii: true
+      - name: SOURCE_CUSTOMER_NUMBER
+        description: "The natural key of the table"
+        tests:
+          - unique
+          - not_null
+      - name: CREATED_DATETIME_GMT
+        description: "The datetime of the record creation in GMT "
+      - name: CREATED_DATETIME_LOCAL
+        description: "The datetime of the record creation locally from user perspective"
+      - name: PROCESS_EXECUTION_NUMBER
+        description: "Audit process"
+
+
