@@ -21,7 +21,7 @@ with source as (
     , updated_at
     , dbt_valid_from	
     , dbt_valid_to
-    from {{ ref('snapshot_customers') }}
+    from {{ ref('snapshots','snapshot_customers') }}
 )
 
 select * from source
