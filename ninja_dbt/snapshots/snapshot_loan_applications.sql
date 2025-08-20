@@ -1,14 +1,13 @@
--- snapshots/snapshot_customers.sql
-{% snapshot snapshot_customers %}
+{% snapshot snapshot_loan_applications %}
 
 {{
     config(
-        unique_key='customer_id',
+        unique_key='APPLICATION_ID',
         strategy='timestamp',
-        updated_at='created_at'
+        updated_at='UPDATED_AT'
     )
 }}
 
-select * from {{ source('loan_source', 'customers') }}
+select * from {{ source('loan_source', 'loan_applications') }}
 
 {% endsnapshot %}

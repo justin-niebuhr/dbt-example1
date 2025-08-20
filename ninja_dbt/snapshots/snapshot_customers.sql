@@ -1,4 +1,3 @@
--- snapshots/snapshot_customers.sql
 {% snapshot snapshot_customers %}
 
 {{

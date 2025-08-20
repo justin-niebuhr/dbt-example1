@@ -4,31 +4,32 @@
 with
     source as (
         select
-            {{ dbt_utils.generate_surrogate_key(["customer_id"]) }} as customer_id,
-            cast(customer_id as varchar(255)) as source_customer_number,
-            convert_timezone(
+            {{ dbt_utils.generate_surrogate_key(["application_id"]) }} as application_id
+            , {{ dbt_utils.generate_surrogate_key(["customer_id"]) }} as customer_id
+            , cast(application_id as varchar(255)) as source_application_number
+            , application_date as  APPLICATION_SUBMIT_DATE
+            , loan_amount_requested as REQUESTED_LOAN_AMOUNT
+            , status as APPLICATION_STATUS
+            , convert_timezone(
                 GET_CURRENT_TIMEZONE(),
                 'GMT',
-                created_at::timestamp_ntz
-            )::timestamp_ntz as created_datetime_gmt,
-            convert_timezone(
-                GET_CURRENT_TIMEZONE(), created_at::timestamp_ntz
-            )::timestamp_ntz as created_datetime_local,
-            first_name,
-            last_name,
-            email,
-            row_number() over (
+                updated_at::timestamp_ntz
+            )::timestamp_ntz as updated_at_gmt
+            , convert_timezone(
+                GET_CURRENT_TIMEZONE(), updated_at::timestamp_ntz
+            )::timestamp_ntz as updated_at_local
+            , row_number() over (
                 partition by customer_id order by dbt_valid_from
-            ) as version,
-            case
+            ) as version
+            , case
                 when dbt_valid_to is null then true else false
-            end as is_current,
-            dbt_updated_at,
-            dbt_valid_from,
-            case
+            end as is_current
+            , dbt_updated_at
+            , dbt_valid_from
+            , case
                 when dbt_valid_to is null then to_date('9999-12-31') 
-            end as dbt_valid_to,
-        from {{ ref('snapshot_customers') }}
+            end as dbt_valid_to
+        from {{ ref('snapshot_loan_application') }}
     )
 
 select *
