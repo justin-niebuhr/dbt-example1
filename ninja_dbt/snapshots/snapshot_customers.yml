@@ -2,7 +2,12 @@ snapshots:
   - name: snapshot_customers
     relation: source('loan_source', 'customers')
     config:
+      schema: snapshots
       unique_key: customer_id
       strategy: timestamp
       updated_at: updated_at
       dbt_valid_to_current: "to_date('9999-12-31')"
+
+
+
+
