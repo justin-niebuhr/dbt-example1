@@ -26,7 +26,7 @@ with
             updated_at,
             dbt_valid_from,
             dbt_valid_to
-        from {{ ref("snapshots","snapshot_customers") }}
+        from {{ ref('DBT_JUSTINNIEBUHR_SNAPSHOTS','snapshot_customers') }}
     )
 
 select *

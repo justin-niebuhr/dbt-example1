@@ -35,6 +35,11 @@ clean-targets:         # directories to be removed by `dbt clean`
 # continue to be built as views. These settings can be overridden in the individual model files
 # using the `{{ config(...) }}` macro.
 
+snapshots:
+  ninja_dbt_loan:
+    +schema: snapshots
+
+
 models:
   ninja_dbt_loan:
     common:
@@ -45,7 +50,5 @@ models:
         +materialized: view   
 
 
-snapshots:
-  ninja_dbt_loan:
-    +schema: snapshots
+
     
