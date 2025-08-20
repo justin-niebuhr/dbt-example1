@@ -45,4 +45,7 @@ models:
         +materialized: view   
 
 
-
+snapshots:
+  ninja_dbt_loan:
+    +schema: snapshots
+    
