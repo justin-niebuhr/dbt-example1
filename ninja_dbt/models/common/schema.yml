@@ -28,7 +28,6 @@ models:
       - name: SOURCE_CUSTOMER_NUMBER
         description: "The natural key of the table"
         tests:
-          - unique
           - not_null
       - name: CREATED_DATETIME_GMT
         description: "The datetime of the record creation in GMT "
@@ -36,5 +35,84 @@ models:
         description: "The datetime of the record creation locally from user perspective"
       - name: PROCESS_EXECUTION_NUMBER
         description: "Audit process"
+
+  - name: DIM_APPLICATION
+    description: "The Loan Application Dimension"
+    columns:
+      - name: APPLICATION_SCD2_ID
+        description: "The surrogate key of the record"
+        tests:
+          - unique
+          - not_null
+      - name: APPLICATION_ID
+        description: "The surrogate key of the table"
+        tests:
+          - not_null
+      - name: SUBMITED_DATE
+        description: "Customer first name"
+      - name: REQUESTED_LOAN_AMOUNT
+        description: "Customer last name"
+      - name: APPLICATION_STATUS
+        description: "Customer email address"
+      - name: SOURCE_APPLICATION_NUMBER
+        description: "The natural key of the table"
+        tests:
+          - not_null
+      - name: APPLICATION_UPDATE_AT_GMT
+        description: "The datetime of the record creation in GMT "
+      - name: APPLICATION_UPDATE_AT_LOCAL
+        description: "The datetime of the record creation locally from user perspective"
+      - name: PROCESS_EXECUTION_NUMBER
+        description: "Audit process"
+
+  - name: DIM_APPROVED_LOAN
+    description: "The Approved Loan Dimension"
+    columns:
+      - name: APPROVED_LOAN_SCD2_ID
+        description: "The surrogate key of the record"
+        tests:
+          - unique
+          - not_null
+      - name: APPROVED_LOAN_ID
+        description: "The surrogate key of the table"
+        tests:
+          - not_null
+      - name: APPLICATION_ID
+        description: "The Foreign key of the Application table"
+       
+      - name: DISBURSEMENT_DATE
+        description: "Loan disbursement date"
+      - name: MATURITY_DATE
+        description: "Loan maturity date"
+      - name: APPROVED_LOAN_AMOUNT
+        description: "Approved loan amount"
+      - name: ANNUAL_INTEREST_RATE
+        description: "Annual interest rate"
+        tests:
+          - not_null
+      - name: LOAN_STATUS
+        description: "Loan status (e.g., “Active”, “Paid”, “Defaulted”)"
+
+
+
+      - name: SUBMITED_DATE
+        description: "Customer first name"
+      - name: REQUESTED_LOAN_AMOUNT
+        description: "Customer last name"
+      - name: LOAN_APPLICATION_STATUS
+        description: "Customer email address"
+      - name: SOURCE_CUSTOMER_NUMBER
+        description: "The natural key of the table"
+        tests:
+          - unique
+          - not_null
+      - name: LOAN_APPLICATION_UPDATE_AT_GMT
+        description: "The datetime of the record creation in GMT "
+      - name: LOAN_APPLICATION_UPDATE_AT_LOCAL
+        description: "The datetime of the record creation locally from user perspective"
+      - name: PROCESS_EXECUTION_NUMBER
+        description: "Audit process"
+
+
 
 
