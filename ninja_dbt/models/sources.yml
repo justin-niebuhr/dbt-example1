@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: loan_source
+    schema: loan_source
+    description: Example loan tables
+    tables:
+      - name: customers
+        description: Assume one record per person who has purchased one or more items
+        loaded_at_field: CREATED_AT::Timestamp
+      - name: loan_applications
+        description: One record per loan application
+        loaded_at_field: updated_at
+      - name: loans
+        description: One record per loan
+        loaded_at_field: start_date
+      - name: payments
+        description: Multiple payments per loan
+        loaded_at_field: payment_date
