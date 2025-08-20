@@ -2,7 +2,7 @@ snapshots:
   - name: snapshot_customers
     relation: source('loan_source', 'customers')
     config:
-      schema: snapshots
+      schema: public
       unique_key: customer_id
       strategy: timestamp
       updated_at: updated_at
