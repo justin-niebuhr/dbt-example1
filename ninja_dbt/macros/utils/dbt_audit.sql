@@ -1,5 +1,5 @@
 {%- macro dbt_audit(cte_ref, created_by, updated_by, created_date, updated_date) -%}
-
+  {# This macro is based on one from gitlabs #}
     SELECT
         *
         , OBJECT_CONSTRUCT(
