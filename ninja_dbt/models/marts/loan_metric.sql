@@ -11,11 +11,17 @@ with
         select
             payment_date as date_day,
             sum(
-                case when payment_type = 'scheduled' then else 0 end
+                case when payment_type = 'scheduled' then payment_amount else 0 end
             ) as total_scheduled_payment_amount,
+            count(
+                distinct case when payment_type = 'scheduled' then customer_id end
+            ) as count_scheduled_payment_customer,
             sum(
-                case when payment_type = 'prepayment' then else 0 end
+                case when payment_type = 'prepayment' then payment_amount else 0 end
             ) as total_prepayment_payment_amount,
+            count(
+                distinct case when payment_type = 'prepayment' then customer_id end
+            ) as count_prepayment_payment_customer,
             sum(payment_amount) as total_payment_amount
         from {{ ref("fct_payment") }}
         group by payment_date
@@ -51,15 +57,15 @@ with
         select
             'year' as time_slice,
             cast(year_actual as varchar(20)) as time_value,
-            total_loans,
-            total_loans_disbursed,
-            total_loans_matured,
-            total_loans_active,
-            total_loans_paid,
-            total_loans_defaulted,
-            total_scheduled_payment_amount,
-            total_prepayment_payment_amount,
-            total_payment_amount
+            SUM(total_loans) AS total_loans,
+            SUM(total_loans_disbursed) AS total_loans_disbursed,
+            SUM(total_loans_matured) AS total_loans_matured,
+            SUM(total_loans_active) AS total_loans_active,
+            SUM(total_loans_paid) AS total_loans_paid,
+            SUM(total_loans_defaulted) AS total_loans_defaulted,
+            SUM(total_scheduled_payment_amount) AS total_scheduled_payment_amount,
+            SUM(total_prepayment_payment_amount) AS total_prepayment_payment_amount,
+            SUM(total_payment_amount) AS total_payment_amount
         from source_date_day d
         left outer join source_loan l on d.date_day = l.date_day
         left outer join source_payment p on d.date_day = p.date_day
@@ -67,56 +73,67 @@ with
         union all
         select
             'quarter' as time_slice,
-            cast(quarter_actual as varchar(20)) as time_value,
-            total_loans,
-            total_loans_disbursed,
-            total_loans_matured,
-            total_loans_active,
-            total_loans_paid,
-            total_loans_defaulted,
-            total_scheduled_payment_amount,
-            total_prepayment_payment_amount,
-            total_payment_amount
+            cast(year_actual as varchar(20))
+            || cast(quarter_actual as varchar(20)) as time_value,
+            SUM(total_loans) AS total_loans,
+            SUM(total_loans_disbursed) AS total_loans_disbursed,
+            SUM(total_loans_matured) AS total_loans_matured,
+            SUM(total_loans_active) AS total_loans_active,
+            SUM(total_loans_paid) AS total_loans_paid,
+            SUM(total_loans_defaulted) AS total_loans_defaulted,
+            SUM(total_scheduled_payment_amount) AS total_scheduled_payment_amount,
+            SUM(total_prepayment_payment_amount) AS total_prepayment_payment_amount,
+            SUM(total_payment_amount) AS total_payment_amount
         from source_date_day d
         left outer join source_loan l on d.date_day = l.date_day
         left outer join source_payment p on d.date_day = p.date_day
-        group by quarter_actual
+        group by year_actual,quarter_actual
         union all
         select
             'month' as time_slice,
-            cast(month_actual as varchar(20)) as time_value,
-            total_loans,
-            total_loans_disbursed,
-            total_loans_matured,
-            total_loans_active,
-            total_loans_paid,
-            total_loans_defaulted,
-            total_scheduled_payment_amount,
-            total_prepayment_payment_amount,
-            total_payment_amount
+            cast(year_actual as varchar(20))
+            || cast(month_actual as varchar(20)) as time_value,
+            SUM(total_loans) AS total_loans,
+            SUM(total_loans_disbursed) AS total_loans_disbursed,
+            SUM(total_loans_matured) AS total_loans_matured,
+            SUM(total_loans_active) AS total_loans_active,
+            SUM(total_loans_paid) AS total_loans_paid,
+            SUM(total_loans_defaulted) AS total_loans_defaulted,
+            SUM(total_scheduled_payment_amount) AS total_scheduled_payment_amount,
+            SUM(total_prepayment_payment_amount) AS total_prepayment_payment_amount,
+            SUM(total_payment_amount) AS total_payment_amount
         from source_date_day d
         left outer join source_loan l on d.date_day = l.date_day
         left outer join source_payment p on d.date_day = p.date_day
-        group by month_actual
+        group by year_actual, month_actual
         union all
         select
             'day' as time_slice,
             cast(date_actual as varchar(20)) as time_value,
-            total_loans,
-            total_loans_disbursed,
-            total_loans_matured,
-            total_loans_active,
-            total_loans_paid,
-            total_loans_defaulted,
-            total_scheduled_payment_amount,
-            total_prepayment_payment_amount,
-            total_payment_amount
+            SUM(total_loans) AS total_loans,
+            SUM(total_loans_disbursed) AS total_loans_disbursed,
+            SUM(total_loans_matured) AS total_loans_matured,
+            SUM(total_loans_active) AS total_loans_active,
+            SUM(total_loans_paid) AS total_loans_paid,
+            SUM(total_loans_defaulted) AS total_loans_defaulted,
+            SUM(total_scheduled_payment_amount) AS total_scheduled_payment_amount,
+            SUM(total_prepayment_payment_amount) AS total_prepayment_payment_amount,
+            SUM(total_payment_amount) AS total_payment_amount
         from source_date_day d
         left outer join source_loan l on d.date_day = l.date_day
         left outer join source_payment p on d.date_day = p.date_day
         group by date_actual
     ),
-    final as (select * from slice_time)
+    final as (
+
+        select
+            *,
+            row_number() over (
+                partition by time_slice order by time_value desc
+            ) as time_order
+
+        from slice_time
+    )
 
     {{
         dbt_audit(
