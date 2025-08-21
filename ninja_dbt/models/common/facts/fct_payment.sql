@@ -1,35 +1,34 @@
 -- models/dim_customer.sql
-{{ config(materialized="table", unique_key="customer_id") }}
+{{ config(materialized="incremental", unique_key="payment_id") }}
 
-with
-    source as (
-        select
-            {{ dbt_utils.generate_surrogate_key(["customer_id"]) }} as customer_id,
-            cast(customer_id as varchar(255)) as source_customer_number,
-            convert_timezone(
-                GET_CURRENT_TIMEZONE(),
-                'GMT',
-                created_at::timestamp_ntz
-            )::timestamp_ntz as created_datetime_gmt,
-            convert_timezone(
-                GET_CURRENT_TIMEZONE(), created_at::timestamp_ntz
-            )::timestamp_ntz as created_datetime_local,
-            first_name,
-            last_name,
-            email,
-            row_number() over (
-                partition by customer_id order by dbt_valid_from
-            ) as version,
-            case
-                when dbt_valid_to is null then true else false
-            end as is_current,
-            dbt_updated_at,
-            dbt_valid_from,
-            case
-                when dbt_valid_to is null then to_date('9999-12-31') 
-            end as dbt_valid_to,
-        from {{ ref('snapshot_customers') }}
-    )
+WITH snapshot_payments AS (
+    SELECT 
+        {{ dbt_utils.generate_surrogate_key(["payment_id"]) }} as payment_id 
+        , cast(payment_id as varchar(255)) as SOURCE_PAYMENT_NUMBER
+        , {{ dbt_utils.generate_surrogate_key(["loan_id"]) }} as loan_id
+        , {{ dbt_utils.generate_surrogate_key(["customer_id"]) }} as customer_id 
+        , payment_amount
+        , payment_date
+        ,{{ status_short('payments','payment_type') }} as payment_type
+    FROM {{ ref('snapshot_payments') }}
+    WHERE dbt_valid_to IS NULL  -- get latest version of each row
+),
 
-select *
-from source
+
+transformed_payments AS (
+    SELECT
+        payment_id 
+        , SOURCE_PAYMENT_NUMBER
+        , loan_id
+        , customer_id
+        , payment_amount
+        , payment_date
+        , payment_type
+    FROM order_snapshot
+    {% if is_incremental() %}
+
+      WHERE payment_date >= (SELECT MAX(payment_date) FROM {{ this }})
+    {% endif %}
+)
+
+SELECT * FROM transformed_payments

@@ -29,7 +29,7 @@ with
             , case
                 when dbt_valid_to is null then to_date('9999-12-31') 
             end as dbt_valid_to
-        from {{ ref('snapshot_loan_application') }}
+        from {{ ref('snapshot_loan_applications') }}
     )
 
 select *
