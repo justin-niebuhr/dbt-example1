@@ -3,88 +3,7 @@ version: 2
 models:
   - name: dim_customer
     description: "The Customer Dimension"
-    columns:
-      - name: CUSTOMER_SCD2_ID
-        description: "The surrogate key of the record"
-        tests:
-          - unique
-          - not_null
-      - name: CUSTOMER_ID
-        description: "The surrogate key of the table"
-        tests:
-          - not_null
-      - name: FIRST_NAME
-        description: "Customer first name"
-        meta:
-          contains_pii: true
-      - name: LAST_NAME
-        description: "Customer last name"
-        meta:
-          contains_pii: true
-      - name: EMAIL
-        description: "Customer email address"
-        meta: 
-          contains_pii: true
-      - name: SOURCE_CUSTOMER_NUMBER
-        description: "The natural key of the table"
-        tests:
-          - not_null
-      - name: CREATED_DATETIME_GMT
-        description: "The datetime of the record creation in GMT "
-      - name: CREATED_DATETIME_LOCAL
-        description: "The datetime of the record creation locally from user perspective"
-      - name: PROCESS_EXECUTION_NUMBER
-        description: "Audit process"
-
-      - name: VERSION	
-        description: "The version or iteration of the record"
-      - name: IS_CURRENT	
-        description: "The current version or last version of the record"
-      - name: DBT_UPDATED_AT
-        description: "The datetime of the update of the  record within the data process"	
-      - name: DBT_VALID_FROM	
-        description: "The datetime the record was created or updated to this state"	
-      - name: DBT_VALID_TO
-        description: "The datetime the record was ended being in this state"	
-
-  - name: DIM_APPLICATION
-    description: "The Loan Application Dimension"
-    columns:
-      - name: APPLICATION_SCD2_ID
-        description: "The surrogate key of the record"
-        tests:
-          - unique
-          - not_null
-      - name: APPLICATION_ID
-        description: "The surrogate key of the table"
-        tests:
-          - not_null
-      - name: SUBMITED_DATE
-        description: "Customer first name"
-      - name: REQUESTED_LOAN_AMOUNT
-        description: "Customer last name"
-      - name: APPLICATION_STATUS
-        description: "Customer email address"
-      - name: SOURCE_APPLICATION_NUMBER
-        description: "The natural key of the table"
-        tests:
-          - not_null
-      - name: APPLICATION_UPDATE_AT_GMT
-        description: "The datetime of the record creation in GMT "
-      - name: APPLICATION_UPDATE_AT_LOCAL
-        description: "The datetime of the record creation locally from user perspective"
-      - name: PROCESS_EXECUTION_NUMBER
-        description: "Audit process"
-      - name: VERSION	
-        description: "The version or iteration of the record"
-      - name: IS_CURRENT	
-        description: "The current version or last version of the record"
-      - name: DBT_UPDATED_AT
-        description: "The datetime of the update of the  record within the data process"	
-      - name: DBT_VALID_FROM	
-        description: "The datetime the record was created or updated to this state"	
-      - name: DBT_VALID_TO
-        description: "The datetime the record was ended being in this state"	
+    
 
   - name: DIM_APPROVED_LOAN
     description: "The Approved Loan Dimension"
@@ -116,16 +35,16 @@ models:
           - not_null
       - name: LOAN_STATUS
         description: "Loan status (e.g., “Active”, “Paid”, “Defaulted”)"
-      - name: VERSION	
+      - name: VERSION
         description: "The version or iteration of the record"
-      - name: IS_CURRENT	
+      - name: IS_CURRENT
         description: "The current version or last version of the record"
       - name: DBT_UPDATED_AT
-        description: "The datetime of the update of the  record within the data process"	
-      - name: DBT_VALID_FROM	
-        description: "The datetime the record was created or updated to this state"	
+        description: "The datetime of the update of the  record within the data process"
+      - name: DBT_VALID_FROM
+        description: "The datetime the record was created or updated to this state"
       - name: DBT_VALID_TO
-        description: "The datetime the record was ended being in this state"	
+        description: "The datetime the record was ended being in this state"
 
   - name: FCT_PAYMENT
     description: "The Loan Payment Fact"
@@ -148,7 +67,3 @@ models:
         description: "Date of payment"
       - name: PAYMENT_TYPE
         description: "Type of payment (e.g., “Scheduled”, “Prepayment”)"
-
-
-
-

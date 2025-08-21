@@ -4,6 +4,7 @@
 with
     final as (
         select
+            {{ dbt_utils.generate_surrogate_key(['customer_id', 'dbt_valid_from']) }} as CUSTOMER_SCD2_ID,
             {{ dbt_utils.generate_surrogate_key(["customer_id"]) }} as customer_id,
             cast(customer_id as varchar(255)) as source_customer_number,
             convert_timezone(
