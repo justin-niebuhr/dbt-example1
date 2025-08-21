@@ -1,22 +1,7 @@
 models:
   - name: mart_customer_segmentation
-    description: "The Customer Dimension"
+    description: "A customer view that provides for segmentation"
     columns:
-
-c.customer_id,
-            email,
-            first_name,
-            last_name,
-            last_application_date,
-            loan_application_count,
-            total_loans,
-            total_loans_active,
-            total_loans_paid,
-            total_loans_defaulted,
-            last_payment_date,
-            last_payment_type,
-            last_payment_amount
-
       - name: customer_id
         description: "Unique id of the customer"
       - name: FIRST_NAME
@@ -41,3 +26,8 @@ c.customer_id,
         description: "The type of payment made of a customer"
       - name: last_payment_amount
         description: "The last payment amount of a customer"
+  - name: mart_loan_performance
+    description: "The performance of loans"
+  - name: mart_loan_metric
+    description: "Loan metric split across time slices"
+  
