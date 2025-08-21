@@ -11,10 +11,10 @@ with
             cast(customer_id as varchar(255)) as source_customer_number,
             convert_timezone(
                 get_current_timezone(), 'GMT', created_at::timestamp_ntz
-            )::timestamp_ntz as created_datetime_gmt,
+            )::timestamp_ntz as created_at_gmt,
             convert_timezone(
                 get_current_timezone(), created_at::timestamp_ntz
-            )::timestamp_ntz as created_datetime_local,
+            )::timestamp_ntz as created_at_local,
             first_name,
             last_name,
             email,

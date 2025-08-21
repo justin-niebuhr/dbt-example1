@@ -1,0 +1,43 @@
+models:
+  - name: mart_customer_segmentation
+    description: "The Customer Dimension"
+    columns:
+
+c.customer_id,
+            email,
+            first_name,
+            last_name,
+            last_application_date,
+            loan_application_count,
+            total_loans,
+            total_loans_active,
+            total_loans_paid,
+            total_loans_defaulted,
+            last_payment_date,
+            last_payment_type,
+            last_payment_amount
+
+      - name: customer_id
+        description: "Unique id of the customer"
+      - name: FIRST_NAME
+        description: "Customer first name"
+      - name: LAST_NAME
+        description: "Customer last name"
+      - name: EMAIL
+        description: "Customer email address"
+      - name: last_application_date
+        description: "The last data a customer submitted a loan application"
+      - name: loan_application_count
+        description: "The number of applicaitons a customer has submitted "
+      - name: total_loans
+        description: "The total number of loans of a customer"
+      - name: total_loans_active
+        description: "The total number of active loans of a customer"
+      - name: total_loans_paid
+        description: "The total number of paid loans of a customer"
+      - name: last_payment_date
+        description: "The date of the last payment of a customer"
+      - name: last_payment_type
+        description: "The type of payment made of a customer"
+      - name: last_payment_amount
+        description: "The last payment amount of a customer"

@@ -3,15 +3,10 @@
 with
     source_date_day as (
         select
-            date_day,
-            date_actual,
-            day_name,
-            month_actual,
-            year_actual,
-            quarter_actual
-            from {{ ref("dim_date") }}
-            Where date_day <= current_date()
-            
+            date_day, date_actual, day_name, month_actual, year_actual, quarter_actual
+        from {{ ref("dim_date") }}
+        where date_day <= current_date()
+
     ),
     source_loan as (
         select
@@ -21,25 +16,30 @@ with
             month_actual,
             year_actual,
             quarter_actual,
-            COUNT(Distinct loan_id  ) as total_loans,
-            COUNT(Distinct CASE WHEN DISBURSEMENT_DATE = date_day THEN loan_id END ) as total_loans_disbursed,
-            COUNT(Distinct CASE WHEN MATURITY_DATE = date_day THEN loan_id END ) as total_loans_matured,
-            COUNT(Distinct CASE WHEN loan_status = 'active' THEN loan_id END ) as total_loans_active,
-            COUNT(Distinct CASE WHEN loan_status = 'paid' THEN loan_id END ) as total_loans_paid,
-            COUNT(Distinct CASE WHEN loan_status = 'defaulted' THEN loan_id END ) as total_loans_defaulted
+            count(distinct loan_id) as total_loans,
+            count(
+                distinct case when disbursement_date = date_day then loan_id end
+            ) as total_loans_disbursed,
+            count(
+                distinct case when maturity_date = date_day then loan_id end
+            ) as total_loans_matured,
+            count(
+                distinct case when loan_status = 'active' then loan_id end
+            ) as total_loans_active,
+            count(
+                distinct case when loan_status = 'paid' then loan_id end
+            ) as total_loans_paid,
+            count(
+                distinct case when loan_status = 'defaulted' then loan_id end
+            ) as total_loans_defaulted
         from source_date_day d
-        LEFT OUTER JOIN {{ ref("dim_loan") }} l on 
-            (l.DBT_VALID_FROM <= d.date_day
-            and l.DBT_VALID_TO >= d.date_day)
-            and l.DISBURSEMENT_DATE <= d.date_day
-            and l.MATURITY_DATE >= d.date_day
-        group by 
-            date_day,
-            date_actual,
-            day_name,
-            month_actual,
-            year_actual,
-            quarter_actual   
+        left outer join
+            {{ ref("dim_loan") }} l
+            on (l.dbt_valid_from <= d.date_day and l.dbt_valid_to >= d.date_day)
+            and l.disbursement_date <= d.date_day
+            and l.maturity_date >= d.date_day
+        group by
+            date_day, date_actual, day_name, month_actual, year_actual, quarter_actual
     ),
 
     final as (
@@ -51,12 +51,12 @@ with
             year_actual,
             quarter_actual,
             total_loans,
-         total_loans_disbursed,
-         total_loans_active,
-         total_loans_paid, 
-         total_loans_defaulted, 
-         total_loans_matured
-        from source_loan 
+            total_loans_disbursed,
+            total_loans_active,
+            total_loans_paid,
+            total_loans_defaulted,
+            total_loans_matured
+        from source_loan
     )
 
     {{
