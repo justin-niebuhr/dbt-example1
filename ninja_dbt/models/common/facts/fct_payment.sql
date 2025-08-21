@@ -15,7 +15,7 @@ WITH snapshot_payments AS (
 ),
 
 
-transformed_payments AS (
+final AS (
     SELECT
         payment_id 
         , SOURCE_PAYMENT_NUMBER
@@ -31,4 +31,10 @@ transformed_payments AS (
     {% endif %}
 )
 
-SELECT * FROM transformed_payments
+{{ dbt_audit(
+    cte_ref="final",
+    created_by="@gitlabs",
+    updated_by="@jniebuhr",
+    created_date="2025-08-21",
+    updated_date="2025-08-21"
+) }}

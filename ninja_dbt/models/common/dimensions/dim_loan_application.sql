@@ -2,7 +2,7 @@
 {{ config(materialized="table", unique_key="customer_id") }}
 
 with
-    source as (
+    final as (
         select
             {{ dbt_utils.generate_surrogate_key(["application_id"]) }} as application_id
             , {{ dbt_utils.generate_surrogate_key(["customer_id"]) }} as customer_id
@@ -32,5 +32,10 @@ with
         from {{ ref('snapshot_loan_applications') }}
     )
 
-select *
-from source
+{{ dbt_audit(
+    cte_ref="final",
+    created_by="@gitlabs",
+    updated_by="@jniebuhr",
+    created_date="2025-08-21",
+    updated_date="2025-08-21"
+) }}
