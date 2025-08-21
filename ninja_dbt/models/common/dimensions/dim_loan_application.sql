@@ -1,8 +1,13 @@
 {{ config(materialized="table", unique_key="customer_id") }}
 
+/*
+Logic not handling historical records in the SCD2 "pre snapshot information"
+*/
+
 with
     final as (
         select
+            {{ dbt_utils.generate_surrogate_key(['application_id', 'dbt_valid_from']) }} as loan_application_SCD2_ID,
             {{ dbt_utils.generate_surrogate_key(["application_id"]) }} as application_id,
             {{ dbt_utils.generate_surrogate_key(["customer_id"]) }} as customer_id,
             cast(application_id as varchar(255)) as source_application_number,

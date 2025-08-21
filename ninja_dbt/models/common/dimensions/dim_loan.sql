@@ -1,8 +1,13 @@
 {{ config(materialized="table", unique_key="loan_id") }}
 
+/*
+Logic not handling historical records in the SCD2 "pre snapshot information"
+*/
+
 with
     final as (
         select
+        {{ dbt_utils.generate_surrogate_key(['loan_id', 'dbt_valid_from']) }} as loan_SCD2_ID,
             {{ dbt_utils.generate_surrogate_key(["loan_id"]) }} as loan_id,
             {{ dbt_utils.generate_surrogate_key(["application_id "]) }}
             as application_id,
@@ -12,7 +17,7 @@ with
             interest_rate as annual_interest_rate,
             start_date as disbursement_date,
             end_date as maturity_date,
-            {{ status_short("loan", "status") }} as application_status,
+            {{ status_short("loan", "status") }} as loan_status,
             row_number() over (
                 partition by customer_id order by dbt_valid_from
             ) as version,
