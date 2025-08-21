@@ -2,7 +2,7 @@
 
 with
     source_customer as (
-        select customer_id, email, first_name, last_name, from {{ ref("dim_customer") }} where is_current
+        select customer_id, email, first_name, last_name from {{ ref("dim_customer") }} where is_current
     ),
     source_loan_application as (
         select customer_id, max(APPLICATION_SUBMIT_DATE) as last_application_date ,count(APPLICATION_ID) as loan_application_count from {{ ref("dim_loan_application") }} where is_current GROUP BY customer_id
@@ -33,7 +33,7 @@ with
                 case when loan_status = 'active' then approved_loan_amount else 0 end
             ) as total_active_loan_amount
         from {{ ref("dim_loan") }}
-        group by c.customer_id, email, first_name, last_name
+        group by customer_id
     ),
 
     final as (
@@ -45,7 +45,6 @@ with
             last_application_date,
             loan_application_count,
             total_loans,
-            total_loans_applications,
             total_loans_active,
             total_loans_paid,
             total_loans_defaulted,

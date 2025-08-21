@@ -1,0 +1,12 @@
+version: 2
+
+macros:
+  - name: status_short
+    description: 'Standardization of status types'
+    arguments:
+      - name: source_table
+        type: string
+        description: The source table that contains the status that is being standardized
+      - name: status_name
+        type: string
+        description: The value captured in the source table

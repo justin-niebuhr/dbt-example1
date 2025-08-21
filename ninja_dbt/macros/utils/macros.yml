@@ -1,0 +1,22 @@
+version: 2
+
+macros:
+  - name: dbt_audit
+    description: 'An audit macro to capture information related to the model based on gitlabs'
+    arguments:
+      - name: cte_ref
+        type: string
+        description: The CTE immediately preceding the macro call
+      - name: created_by
+        type: string
+        description: The GitLab handle of the original model creator
+      - name: updated_by
+        type: string
+        description: The GitLab handle of the model editor
+      - name: created_date
+        type: date
+        description: Manually input ISO date of when model was original created
+      - name: updated_date
+        type: date
+        description: Manually input ISO date of when model was updated
+
