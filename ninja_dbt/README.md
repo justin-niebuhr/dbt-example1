@@ -1,4 +1,4 @@
-Welcome to your new dbt project!
+Example Project Made by Justin Niebuhr
 
 ### Using the starter project
 
