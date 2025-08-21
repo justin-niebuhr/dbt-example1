@@ -1,3 +1,4 @@
+{{ config(materialized="table", unique_key="date_day") }}
 with
     date_spine as (
 
