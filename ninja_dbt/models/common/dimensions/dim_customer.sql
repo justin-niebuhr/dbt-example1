@@ -2,7 +2,6 @@
 /*
 Logic not handling historical records in the SCD2 "pre snapshot information"
 */
-
 with
     final as (
         select
