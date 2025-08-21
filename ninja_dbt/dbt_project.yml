@@ -43,11 +43,11 @@ snapshots:
 models:
   ninja_dbt_loan:
     common:
-      +materialized: table  
+      +materialized: table
       dimensions:
-        +materialized: table     
+        +materialized: table
       facts:
-        +materialized: view   
+        +materialized: view
 
 
 

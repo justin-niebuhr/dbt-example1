@@ -1,10 +1,8 @@
 version: 2
 
 models:
-  - name: dim_customer
+  - name: DIM_CUSTOMER
     description: "The Customer Dimension"
-    
-
   - name: DIM_APPROVED_LOAN
     description: "The Approved Loan Dimension"
     columns:
@@ -45,7 +43,6 @@ models:
         description: "The datetime the record was created or updated to this state"
       - name: DBT_VALID_TO
         description: "The datetime the record was ended being in this state"
-
   - name: FCT_PAYMENT
     description: "The Loan Payment Fact"
     columns:

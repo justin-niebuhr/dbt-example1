@@ -1,4 +1,3 @@
--- models/dim_customer.sql
 {{ config(materialized="table", unique_key="customer_id") }}
 
 with
@@ -20,7 +19,6 @@ with
                 partition by customer_id order by dbt_valid_from
             ) as version,
             case when dbt_valid_to is null then true else false end as is_current,
-            dbt_updated_at,
             dbt_valid_from,
             case
                 when dbt_valid_to is null then to_date('9999-12-31')
