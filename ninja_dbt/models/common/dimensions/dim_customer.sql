@@ -7,12 +7,10 @@ with
             {{ dbt_utils.generate_surrogate_key(["customer_id"]) }} as customer_id,
             cast(customer_id as varchar(255)) as source_customer_number,
             convert_timezone(
-                GET_CURRENT_TIMEZONE(),
-                'GMT',
-                created_at::timestamp_ntz
+                get_current_timezone(), 'GMT', created_at::timestamp_ntz
             )::timestamp_ntz as created_datetime_gmt,
             convert_timezone(
-                GET_CURRENT_TIMEZONE(), created_at::timestamp_ntz
+                get_current_timezone(), created_at::timestamp_ntz
             )::timestamp_ntz as created_datetime_local,
             first_name,
             last_name,
@@ -20,21 +18,21 @@ with
             row_number() over (
                 partition by customer_id order by dbt_valid_from
             ) as version,
-            case
-                when dbt_valid_to is null then true else false
-            end as is_current,
+            case when dbt_valid_to is null then true else false end as is_current,
             dbt_updated_at,
             dbt_valid_from,
             case
-                when dbt_valid_to is null then to_date('9999-12-31') 
+                when dbt_valid_to is null then to_date('9999-12-31')
             end as dbt_valid_to,
-        from {{ ref('snapshot_customers') }}
+        from {{ ref("snapshot_customers") }}
     )
 
-{{ dbt_audit(
-    cte_ref="final",
-    created_by="@gitlabs",
-    updated_by="@jniebuhr",
-    created_date="2025-08-21",
-    updated_date="2025-08-21"
-) }}
+    {{
+        dbt_audit(
+            cte_ref="final",
+            created_by="@gitlabs",
+            updated_by="@jniebuhr",
+            created_date="2025-08-21",
+            updated_date="2025-08-21",
+        )
+    }}
