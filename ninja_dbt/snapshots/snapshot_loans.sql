@@ -1,5 +1,7 @@
 {% snapshot snapshot_loans %}
-
+/*
+        table_format='iceberg',
+*/
 {{
     config(
         unique_key='loan_id',
@@ -11,7 +13,7 @@
                     'end_date',
                     'status',
                     ],
-        table_format='iceberg'
+
 
     )
 }}

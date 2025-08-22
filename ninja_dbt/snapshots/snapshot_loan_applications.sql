@@ -1,11 +1,12 @@
 {% snapshot snapshot_loan_applications %}
-
+/*
+        table_format='iceberg',
+*/
 {{
     config(
         unique_key='APPLICATION_ID',
         strategy='timestamp',
-        updated_at='UPDATED_AT'
-        table_format='iceberg'
+        updated_at='UPDATED_AT',
     )
 }}
 
