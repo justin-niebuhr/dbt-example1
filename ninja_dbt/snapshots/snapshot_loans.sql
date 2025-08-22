@@ -11,6 +11,7 @@
                     'end_date',
                     'status',
                     ],
+        table_format='iceberg'
 
     )
 }}

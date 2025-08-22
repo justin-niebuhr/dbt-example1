@@ -5,6 +5,7 @@
         unique_key='payment_id',
         strategy='timestamp',
         updated_at='payment_date'
+        table_format='iceberg'
     )
 }}
 

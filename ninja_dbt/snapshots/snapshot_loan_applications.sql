@@ -5,6 +5,7 @@
         unique_key='APPLICATION_ID',
         strategy='timestamp',
         updated_at='UPDATED_AT'
+        table_format='iceberg'
     )
 }}
 

@@ -5,6 +5,7 @@
         unique_key='customer_id',
         strategy='timestamp',
         updated_at='created_at'
+        table_format='iceberg'
     )
 }}
 
